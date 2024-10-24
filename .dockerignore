@@ -1,0 +1,9 @@
+.git
+.github
+install
+dist
+build
+.venv
+lib
+wheelhouse
+piper_phonemize.egg-info
