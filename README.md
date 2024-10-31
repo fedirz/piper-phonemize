@@ -38,12 +38,12 @@ The `piper_phonemize` Python package is built using [pybind11](https://pybind11.
 See `src/python_test.py` for a Python example.
 
 
-## Building
+## Building (Docker)
 
-Use Docker:
-
-``` sh
-docker buildx build . -t piper-phonemize --output 'type=local,dest=dist'
+```sh
+docker buildx build . --platform linux/amd64 --build-arg TARGET_ARCH=x86_64 --output 'type=local,dest=dist'
+# NOTE: unfortunately, I couldn't get it to work with ARM64
+# docker buildx build . --platform linux/arm64 --build-arg TARGET_ARCH=aarch64 --output 'type=local,dest=dist'
 ```
 
 Find library and Python wheels in `dist/`
