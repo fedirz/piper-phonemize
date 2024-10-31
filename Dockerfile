@@ -3,7 +3,7 @@
 # from TARGETARCH which is defined by docker. The reason is because TARGETARCH=amd64
 # but we need TARGET_ARCH=x86_64
 ARG TARGET_ARCH
-FROM quay.io/pypa/manylinux_2_28_${TARGET_ARCH} AS build
+FROM quay.io/pypa/manylinux_2_28_${TARGET_ARCH:-x86_64} AS build
 
 WORKDIR /piper-phonemize
 
