@@ -12,7 +12,6 @@ htmlcov
 /venv/
 *.egg-info/
 
-/dist/
 /*.so
 /test
 
