@@ -1,11 +1,9 @@
 name: main
-
 on:
   workflow_dispatch:
   push:
     tags:
       - "*"
-
 jobs:
   create_release:
     name: Create release
