@@ -1,0 +1,46 @@
+name: build
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+    tags:
+      - "*"
+jobs:
+  docker:
+    strategy:
+      fail-fast: false # Continue running jobs even if one fails
+      matrix:
+        platform: [linux/amd64, linux/arm64]
+        include:
+          - platform: linux/amd64
+            target-arch: x86_64
+          - platform: linux/arm64
+            target-arch: aarch64
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          build-args: |
+            TARGET_ARCH=${{ matrix.target-arch }}
+          push: false
+          platforms: ${{ matrix.platform }}
+          cache-from: type=gha,ref=piper-phonemize-${{ matrix.target-arch }}:buildcache
+          cache-to: type=gha,ref=piper-phonemize-${{ matrix.target-arch }}:buildcache,mode=max
+          outputs: type=local,dest=dist
+      # https://github.com/actions/upload-artifact?tab=readme-ov-file#usage
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.target-arch }}
+          path: dist/
+          retention-days: 90 # max retention period
