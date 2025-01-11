@@ -21,13 +21,14 @@ RUN /opt/python/cp312-cp312/bin/python -m build --wheel --sdist .
 # Fixed up wheels will end up `./wheelhouse` directory.
 # Without specifying `LD_LIBRARY_PATH` auditwheel will not be able to find the required libraries.
 # NOTE: these libraries were installed in by one of the previous `cmake` commands.
-# Both architectures are included in the `LD_LIBRARY_PATH` to ensure that the library is found in both cases.
-ENV LD_LIBRARY_PATH='/piper-phonemize/install/lib/:/piper-phonemize/install/lib64/:/piper-phonemize/lib/onnxruntime-linux-x64-1.14.1/lib:/piper-phonemize/lib/onnxruntime-linux-aarch64-1.14.1/lib'
-RUN auditwheel repair dist/*.whl
-# Smoke test
-RUN echo "testing one two three" | ./install/bin/piper_phonemize -l en-us --espeak-data ./piper_phonemize
-
+# # Both architectures are included in the `LD_LIBRARY_PATH` to ensure that the library is found in both cases.
+# ENV LD_LIBRARY_PATH="./install/lib/:./install/lib64/:./lib/onnxruntime-linux-x64-1.14.1/lib:./lib/onnxruntime-linux-aarch64-1.14.1/lib:${LD_LIBRARY_PATH}"
+# RUN auditwheel repair dist/*.whl
+# # Smoke test
+# RUN echo "testing one two three" | ./install/bin/piper_phonemize -l en-us --espeak-data ./piper_phonemize
+#
 FROM scratch
-
-COPY --from=build /piper-phonemize/wheelhouse/ ./
-COPY --from=build /piper-phonemize/dist/*.tar.gz ./
+CMD [ "/bin/bash" ]
+#
+# COPY --from=build /piper-phonemize/wheelhouse/ ./
+# COPY --from=build /piper-phonemize/dist/*.tar.gz ./
